@@ -3,15 +3,70 @@ $(document).ready(function() {
   // - jQuery will call it when the page is loaded
 
   // first lets grab the <body></body>
-  var body = $('body');
+  var $body = $('body');
+  var $duck = [];
 
-  // 1. Can you create a <div> with the class "duck" and name it "duck"
+  function createDuck() {
+    for (var i = 0; i < 5; i++){
+      $duck[i] = $('<div/>').addClass('duck');
+      $body.append($duck);
+    }
 
-  // 2. Next, use setInterval to toggle the "flap" class on the duck every 250 ms (1/4 second)
+    $('.duck').each(function(){
+      $(this).css({
+        'top' : Math.floor(Math.random() * window.innerHeight) + 'px',
+        'left' : Math.floor(Math.random() * window.innerWidth) + 'px'          
+      })
+    });
+    
+    setInterval(function(){
+      $('.duck').each(function(){
+        $(this).toggleClass('flap');
+      });
+    }, 250);
 
-  // 3. Fantastic!  Now, let's move the duck using CSS "top" and "left"
+    setInterval(function(){
+      $('.duck').each(function(){
+        $(this).animate({
+          'top' : Math.floor(Math.random() * window.innerHeight) + 'px',
+          'left' : Math.floor(Math.random() * window.innerWidth) + 'px'          
+        })
+      });
+    }, 1000 , 'linear');
 
-  // 4. Try making the duck move to a different location after 1 second
+    $('.duck').on('click', function(){
+      $(this).removeClass('duck').addClass('shot');
 
-  // 5. Congratulations!
+      $('.shot').css({
+        position: 'absolute',
+        backgroundImage : 'url(images/shot.png)',
+        width : '100px',
+        height : '95px',
+        })
+
+      setTimeout(function(){
+        $('.shot').remove();
+      }, 1000);
+    });
+    
+    return $duck;
+  }
+  createDuck();
+
+  function checkForWinner() {
+    if($('.duck').length == 0){
+      alert("YOU WIN!");
+    } else {
+      setTimeout(checkForWinner, 1000);
+    }
+  }
+  checkForWinner();
+
+  // 14. BONUS: The ducks are moving pretty erratically, can you think
+  //     of a way to adjust the ducks speed based on how far needs to move?
+
+  // 15. BONUS: Add the "left" and "right" class to the duck based on the
+  //     direction the duck is flying
+  
+
 })
